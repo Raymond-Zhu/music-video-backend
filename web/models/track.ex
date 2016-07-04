@@ -1,12 +1,14 @@
 defmodule Karaoke.Track do
   use Karaoke.Web, :model
 
+  @derive {Poison.Encoder, except: [:id]}
   schema "tracks" do
     field :track_id, :string
     field :title, :string
     field :artist, :string
     field :popularity, :float
     field :youtube_id, :string
+    field :album_title, :string
     field :album_art, :string
   end
 

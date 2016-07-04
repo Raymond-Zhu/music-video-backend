@@ -8,6 +8,7 @@ defmodule Karaoke.Repo.Migrations.CreateTrack do
       add :artist, :string
       add :popularity, :float
       add :youtube_id, :string
+      add :album_title, :string
       add :album_art, :string
     end
 
