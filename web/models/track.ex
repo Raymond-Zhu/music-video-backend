@@ -13,7 +13,7 @@ defmodule Karaoke.Track do
   end
 
   @required_fields ~w(title artist youtube_id)
-  @optional_fields ~w(album_art popularity track_id)
+  @optional_fields ~w(album_art popularity track_id album_title)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
