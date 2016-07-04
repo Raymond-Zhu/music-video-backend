@@ -3,7 +3,7 @@ defmodule Karaoke.Track do
 
   require Logger
 
-  @derive {Poison.Encoder, except: [:id, :track_id]}
+  @derive {Poison.Encoder, except: [:__meta__, :id, :track_id]}
   schema "tracks" do
     field :track_id, :string, default: ""
     field :title, :string, default: ""
