@@ -2,14 +2,15 @@ defmodule Karaoke.Artist do
   use Karaoke.Web, :model
 
   @primary_key {:artist_id, :string, []}
-  @derive [{Phoenix.Param, key: :artist_id, }, {Poison.Encoder, only: [:name, :img_url]}]
+  @derive {Poison.Encoder, only: [:name, :img_url]}
   schema "artists" do
+    field :artist_id, :string
     field :name, :string
     field :img_url, :string
   end
 
-  @required_fields ~w(artist_id name img_url)
-  @optional_fields ~w()
+  @required_fields ~w(name)
+  @optional_fields ~w(artist_id img_url)
 
   @doc """
   Creates a changeset based on the `model` and `params`.

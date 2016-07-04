@@ -9,6 +9,7 @@ defmodule Karaoke.Router do
     pipe_through :api
 
     get "/artist", ArtistController, :index
-    get "/artist/:name", ArtistController, :create
+    get "/artist/get", ArtistController, :show
+    get "/artist/add", ArtistController, :create
   end
 end
