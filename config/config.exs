@@ -27,3 +27,7 @@ import_config "#{Mix.env}.exs"
 config :phoenix, :generators,
   migration: true,
   binary_id: false
+
+config :karaoke,
+  musicgraph_key: "119bfeaa881f98829873b1bf0cbc7a1b",
+  musicgraph_artist: "http://api.musicgraph.com/api/v2/artist/suggest"
