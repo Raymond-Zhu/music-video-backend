@@ -10,6 +10,6 @@ defmodule Karaoke.Router do
 
     get "/artist", ArtistController, :index
     get "/artist/get", ArtistController, :show
-    get "/artist/add", ArtistController, :create
+    post "/artist/add", ArtistController, :create
   end
 end

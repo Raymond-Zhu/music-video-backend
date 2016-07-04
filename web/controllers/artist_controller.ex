@@ -4,11 +4,9 @@ defmodule Karaoke.ArtistController do
   alias Karaoke.Artist
 
   def index(conn, _params) do
-    artist_list = Repo.all(Artist) |> Poison.encode!
-
     conn
     |> put_status(:ok)
-    |> render("artist.json", artists: artist_list)
+    |> render("artist.json", artists: Repo.all(Artist))
   end
 
   def show(conn, %{"name" => name}) do
