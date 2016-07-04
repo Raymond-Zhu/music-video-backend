@@ -1,9 +1,8 @@
 defmodule Karaoke.Track do
   use Karaoke.Web, :model
 
-  @primary_key{:track_id, :string, []}
-  @derive {Phoenix.Param, key: :track_id}
   schema "tracks" do
+    field :track_id, :string
     field :title, :string
     field :artist, :string
     field :popularity, :float
@@ -11,8 +10,8 @@ defmodule Karaoke.Track do
     field :album_art, :string
   end
 
-  @required_fields ~w(track_id title artist popularity youtube_id album_art)
-  @optional_fields ~w()
+  @required_fields ~w(title artist youtube_id)
+  @optional_fields ~w(album_art popularity track_id)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -23,5 +22,6 @@ defmodule Karaoke.Track do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> unique_constraint([:title, :youtube_id])
   end
 end
