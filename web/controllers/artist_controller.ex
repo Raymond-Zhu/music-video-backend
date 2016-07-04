@@ -6,6 +6,9 @@ defmodule Karaoke.ArtistController do
 
     conn
     |> put_status(:ok)
-    |> render("success.json", artist: artist_list)
+    |> render("success.json", artists: artist_list)
+  end
+
+  def create(conn, %{"name" => name}) do
   end
 end

@@ -6,8 +6,6 @@ defmodule Karaoke.Artist do
   schema "artists" do
     field :name, :string
     field :img_url, :string
-
-    timestamps
   end
 
   @required_fields ~w(artist_id name img_url)

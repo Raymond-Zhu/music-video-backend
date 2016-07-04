@@ -9,8 +9,6 @@ defmodule Karaoke.Track do
     field :popularity, :float
     field :youtube_id, :string
     field :album_art, :string
-
-    timestamps
   end
 
   @required_fields ~w(track_id title artist popularity youtube_id album_art)
