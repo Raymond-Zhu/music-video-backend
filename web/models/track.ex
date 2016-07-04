@@ -1,8 +1,9 @@
 defmodule Karaoke.Track do
   use Karaoke.Web, :model
 
+  @primary_key{:track_id, :string, []}
+  @derive {Phoenix.Param, key: :track_id}
   schema "tracks" do
-    field :track_id, :string
     field :title, :string
     field :artist, :string
     field :popularity, :float
