@@ -2,7 +2,7 @@ defmodule Karaoke.Artist do
   use Karaoke.Web, :model
 
   @primary_key {:artist_id, :string, []}
-  @derive {Phoenix.Param, key: :artist_id}
+  @derive [{Phoenix.Param, key: :artist_id, }, {Poison.Encoder, only: [:name, :img_url]}]
   schema "artists" do
     field :name, :string
     field :img_url, :string
