@@ -7,14 +7,14 @@ defmodule Karaoke.Track do
   schema "tracks" do
     field :track_id, :string
     field :title, :string
-    field :artist, :string
+    field :artist_name, :string
     field :popularity, :float
-    field :youtube_id, :string
+    field :track_youtube_id, :string
     field :album_title, :string
     field :album_art, :string
   end
 
-  @required_fields ~w(title artist youtube_id)
+  @required_fields ~w(title artist_name track_youtube_id)
   @optional_fields ~w(album_art popularity track_id album_title)
 
   @doc """
@@ -26,7 +26,7 @@ defmodule Karaoke.Track do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> unique_constraint([:title, :youtube_id])
+    |> unique_constraint(:title)
   end
 
   def insert_tracks_for(artist) when is_binary(artist) do
@@ -45,7 +45,7 @@ defmodule Karaoke.Track do
       {:ok, struct} -> :ok
       {:error, changeset} ->
         Logger.error "An error occured while inserting track.\n" <>
-                      "Artist: #{track["artist"]}\n" <>
+                      "Artist: #{track["artist_name"]}\n" <>
                       "Track: #{track["title"]}\n" <>
                       "Error: #{Karaoke.ChangesetView.translate_errors(changeset) |> Poison.encode!}"
     end

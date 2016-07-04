@@ -5,13 +5,13 @@ defmodule Karaoke.Repo.Migrations.CreateTrack do
     create table(:tracks) do
       add :track_id, :string
       add :title, :string
-      add :artist, :string
+      add :artist_name, :string
       add :popularity, :float
-      add :youtube_id, :string
+      add :track_youtube_id, :string
       add :album_title, :string
       add :album_art, :string
     end
 
-    create unique_index(:tracks, [:title, :youtube_id])
+    create unique_index(:tracks, [:title])
   end
 end

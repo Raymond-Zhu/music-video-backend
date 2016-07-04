@@ -5,9 +5,11 @@ defmodule Karaoke.TrackController do
   def show(conn, %{"artist" => artist}) do
     tracks = Repo.all(
               from track in Karaoke.Track,
-              where: ^artist == track.artist,
+              where: ^artist == track.artist_name,
               select: track
              )
+
+    IO.inspect tracks
 
     conn
     |> put_status(:ok)
