@@ -3,9 +3,9 @@ defmodule Karaoke.Artist do
 
   @derive {Poison.Encoder, only: [:name, :img_url]}
   schema "artists" do
-    field :name, :string
-    field :artist_id, :string
-    field :img_url, :string
+    field :name, :string, default: ""
+    field :artist_id, :string, default: ""
+    field :img_url, :string, default: ""
   end
 
   @required_fields ~w(name)

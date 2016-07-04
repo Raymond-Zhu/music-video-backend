@@ -3,15 +3,15 @@ defmodule Karaoke.Track do
 
   require Logger
 
-  @derive {Poison.Encoder, except: [:id]}
+  @derive {Poison.Encoder, except: [:id, :track_id]}
   schema "tracks" do
-    field :track_id, :string
-    field :title, :string
-    field :artist_name, :string
-    field :popularity, :float
-    field :track_youtube_id, :string
-    field :album_title, :string
-    field :album_art, :string
+    field :track_id, :string, default: ""
+    field :title, :string, default: ""
+    field :artist_name, :string, default: ""
+    field :popularity, :float, default: 0.0
+    field :track_youtube_id, :string, default: ""
+    field :album_title, :string, default: ""
+    field :album_art, :string, default: ""
   end
 
   @required_fields ~w(title artist_name track_youtube_id)
