@@ -9,14 +9,6 @@ defmodule Karaoke.ArtistController do
     |> render("artist.json", artists: Repo.all(Artist))
   end
 
-  def show(conn, %{"name" => name}) do
-    artist_results = name |> Karaoke.MusicGraph.get_artist
-
-    conn
-    |> put_status(:ok)
-    |> render("artist.json", artists: artist_results)
-  end
-
   def create(conn, params) do
     changeset = Artist.changeset(%Artist{}, params)
 
