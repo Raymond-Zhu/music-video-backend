@@ -7,6 +7,7 @@ defmodule Karaoke.Track do
   schema "tracks" do
     field :track_id, :string, default: ""
     field :title, :string, default: ""
+    field :track_artist_id :string, default: ""
     field :artist_name, :string, default: ""
     field :popularity, :float, default: 0.0
     field :track_youtube_id, :string, default: ""
@@ -14,7 +15,7 @@ defmodule Karaoke.Track do
     field :album_art, :string, default: ""
   end
 
-  @required_fields ~w(title artist_name track_youtube_id)
+  @required_fields ~w(title artist_name track_artist_id track_youtube_id)
   @optional_fields ~w(album_art popularity track_id album_title)
 
   @doc """
@@ -49,7 +50,7 @@ defmodule Karaoke.Track do
   defp insert_track(track) do
     changeset = __MODULE__.changeset(%__MODULE__{}, track)
     case Karaoke.Repo.insert(changeset) do
-      {:ok, _struct} -> Logger.info "ok"
+      {:ok, _struct} -> :ok
       {:error, changeset} ->
         Logger.error "An error occured while inserting track.\n" <>
                       "    Artist: #{track["artist_name"]}\n" <>
