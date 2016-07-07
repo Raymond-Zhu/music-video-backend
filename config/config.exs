@@ -29,6 +29,6 @@ config :phoenix, :generators,
   binary_id: false
 
 config :karaoke,
-  musicgraph_key: "119bfeaa881f98829873b1bf0cbc7a1b",
+  musicgraph_key: "",
   musicgraph_artist: "http://api.musicgraph.com/api/v2/artist/suggest",
   musicgraph_tracks: "http://api.musicgraph.com/api/v2/track/search"
