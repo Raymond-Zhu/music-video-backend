@@ -1,15 +1,15 @@
 defmodule Karaoke.Artist do
   use Karaoke.Web, :model
 
-  @derive {Poison.Encoder, only: [:name, :img_url]}
+  @derive {Poison.Encoder, only: [:name, :artist_id, :img_url]}
   schema "artists" do
     field :name, :string, default: ""
     field :artist_id, :string, default: ""
     field :img_url, :string, default: ""
   end
 
-  @required_fields ~w(name)
-  @optional_fields ~w(artist_id img_url)
+  @required_fields ~w(name artist_id)
+  @optional_fields ~w(img_url)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -21,5 +21,6 @@ defmodule Karaoke.Artist do
     model
     |> cast(params, @required_fields, @optional_fields)
     |> unique_constraint(:name)
+    |> unique_constraint(:artist_id)
   end
 end

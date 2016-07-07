@@ -8,6 +8,6 @@ defmodule Karaoke.Repo.Migrations.CreateArtist do
       add :img_url, :string
     end
 
-    create unique_index(:artists, [:name])
+    create unique_index(:artists, [:name, :artist_id])
   end
 end

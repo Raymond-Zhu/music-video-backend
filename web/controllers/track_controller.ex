@@ -2,14 +2,12 @@ defmodule Karaoke.TrackController do
   use Karaoke.Web, :controller
   import Ecto.Query
 
-  def show(conn, %{"artist" => artist}) do
+  def show(conn, %{"artist_id" => artist_id}) do
     tracks = Repo.all(
               from track in Karaoke.Track,
-              where: ^artist == track.artist_name,
+              where: ^artist_id == track.artist_id,
               select: track
              )
-
-    IO.inspect tracks
 
     conn
     |> put_status(:ok)

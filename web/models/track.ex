@@ -29,25 +29,32 @@ defmodule Karaoke.Track do
     |> unique_constraint(:title)
   end
 
-  def insert_tracks_for(artist) when is_binary(artist) do
-    tracks = artist |> Karaoke.MusicGraph.get_tracks
+  def insert_tracks_for(%Karaoke.Artist{artist_id: artist_id, name: name})  do
+    name
+    |> Karaoke.MusicGraph.get_tracks
+    |> case do
+         {:error, %{reason: reason}} -> Logger.error "HTTPoison encountered an error. Reason: #{reason}"
+         {:error, %{status_code: code, body: body}} ->
+           Logger.error "Could not get tracks for artist.\n" <>
+                         "    Status Code: #{code}\n" <>
+                         "    Body: #{body}"
 
-    case tracks do
-      [] -> Logger.error "No tracks were returned for artist #{artist}"
-      _ -> Enum.filter_map(tracks, fn(track) -> Map.get(track, "track_youtube_id") != nil end, &insert_track/1)
-    end
+         [] -> Logger.error "No tracks were returned for artist: #{name}"
+         tracks -> Enum.filter_map(tracks,
+                                   fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end,
+                                   &insert_track/1)
+       end
   end
 
   defp insert_track(track) do
     changeset = __MODULE__.changeset(%__MODULE__{}, track)
-
     case Karaoke.Repo.insert(changeset) do
-      {:ok, struct} -> :ok
+      {:ok, _struct} -> Logger.info "ok"
       {:error, changeset} ->
         Logger.error "An error occured while inserting track.\n" <>
-                      "Artist: #{track["artist_name"]}\n" <>
-                      "Track: #{track["title"]}\n" <>
-                      "Error: #{Karaoke.ChangesetView.translate_errors(changeset) |> Poison.encode!}"
+                      "    Artist: #{track["artist_name"]}\n" <>
+                      "    Track: #{track["title"]}\n" <>
+                      "    Error: #{Karaoke.ChangesetView.translate_errors(changeset) |> Poison.encode!}"
     end
   end
 end

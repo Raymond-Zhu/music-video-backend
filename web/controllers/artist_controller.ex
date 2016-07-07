@@ -13,8 +13,8 @@ defmodule Karaoke.ArtistController do
     changeset = Artist.changeset(%Artist{}, params)
 
     case Repo.insert(changeset) do
-      {:ok, struct} ->
-        struct.name |> Karaoke.Track.insert_tracks_for
+      {:ok, artist} ->
+        artist |> Karaoke.Track.insert_tracks_for
 
         conn
         |> put_status(:created)
