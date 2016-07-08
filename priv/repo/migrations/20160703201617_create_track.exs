@@ -5,6 +5,7 @@ defmodule Karaoke.Repo.Migrations.CreateTrack do
     create table(:tracks) do
       add :track_id, :string
       add :track_artist_id, :string
+      add :track_spotify_id, :string
       add :title, :string
       add :artist_name, :string
       add :popularity, :float

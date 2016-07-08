@@ -8,15 +8,16 @@ defmodule Karaoke.Track do
     field :track_id, :string, default: ""
     field :title, :string, default: ""
     field :track_artist_id, :string, default: ""
+    field :track_youtube_id, :string, default: ""
+    field :track_spotify_id, :string, default: ""
     field :artist_name, :string, default: ""
     field :popularity, :float, default: 0.0
-    field :track_youtube_id, :string, default: ""
     field :album_title, :string, default: ""
     field :album_art, :string, default: ""
   end
 
-  @required_fields ~w(title artist_name track_artist_id track_youtube_id)
-  @optional_fields ~w(album_art popularity track_id album_title)
+  @required_fields ~w(title artist_name track_artist_id track_youtube_id track_id)
+  @optional_fields ~w(album_art popularity track_spotify_id album_title)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
