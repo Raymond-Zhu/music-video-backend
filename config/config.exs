@@ -30,6 +30,7 @@ config :phoenix, :generators,
 
 config :karaoke,
   musicgraph_tracks: "http://api.musicgraph.com/api/v2/track/search",
-  spotify_tracks: "https://api.spotify.com/v1/tracks"
+  spotify_tracks: "https://api.spotify.com/v1/tracks",
+  youtube_image: "http://img.youtube.com/vi/"
 
 import_config "api_key.exs"

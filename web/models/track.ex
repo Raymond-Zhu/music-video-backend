@@ -42,13 +42,16 @@ defmodule Karaoke.Track do
                          "    Body: #{body}"
 
          [] -> Logger.error "No tracks were returned for artist: #{name}"
-         tracks -> Enum.filter_map(tracks,
-                                   fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end,
-                                   &insert_track/1)
+         list_of_tracks ->
+           album_art_map = Karaoke.Spotify.get_album_art(list_of_tracks)
+
+           list_of_tracks
+           |> get_images(album_art_map)
+           |> Enum.filter_map(fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end, &insert_track/1)
        end
   end
 
-  defp insert_track(track) do
+  def insert_track(track) do
     changeset = __MODULE__.changeset(%__MODULE__{}, track)
     case Karaoke.Repo.insert(changeset) do
       {:ok, _struct} -> :ok
@@ -60,6 +63,18 @@ defmodule Karaoke.Track do
     end
   end
 
-  def get_image do
+  def get_images(list_of_tracks, album_art_map) do
+    Logger.info "#{inspect list_of_tracks}"
+    for track <- list_of_tracks do
+      Logger.info "Track: #{inspect track}"
+      spotify_id = track["track_spotify_id"]
+      Logger.info "Spotify ID: #{inspect spotify_id}"
+      Logger.info "Album: #{inspect album_art_map}"
+      if album_art_map[spotify_id] != nil do
+        Map.put(track, "image", album_art_map[spotify_id])
+      else
+        Map.put(track, "image", Application.get_env(:karaoke, :youtube_image) <>"#{track["track_youtube_id"]}/0.jpg")
+      end
+    end
   end
 end

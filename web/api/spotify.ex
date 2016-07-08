@@ -5,13 +5,10 @@ defmodule Karaoke.Spotify do
   defp handle_response({:error, %{reason: reason}}), do: {:error, %{reason: reason}}
   defp handle_response({:ok, %{status_code: code, body: body}}), do: {:error, %{status_code: code, body: body}}
 
-  defp process_response({:error, info}), do: Logger.error "Could not get album art.\n #{inspect info}"
-  defp process_response(spotify_tracks) do
-    map_of_art = %{}
-    for %{"id" => id, "album" => %{"images" => [%{"url" => image_url} | _rest]}} <- spotify_tracks do
-       map_of_art
-       |> Map.put(id, image_url)
-    end
+  def process_response({:error, info}), do: Logger.error "Could not get album art.\n #{inspect info}"
+  def process_response(spotify_tracks) do
+    Enum.reduce(spotify_tracks, %{},
+                fn(%{"id" => id, "album" => %{"images" => [%{"url" => image_url} | _rest]}}, acc) -> Map.merge(acc, %{id => image_url}) end)
   end
 
   defp concat_ids(list_of_tracks) do
@@ -32,7 +29,7 @@ defmodule Karaoke.Spotify do
   end
 
   def get_album_art(list_of_tracks) do
-    case list_of_tracks |> concat_ids do
+    case concat_ids(list_of_tracks) do
       nil -> %{}
       ids ->
         url = Application.get_env(:karaoke, :spotify_tracks) <>

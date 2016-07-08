@@ -11,6 +11,5 @@ defmodule Karaoke.MusicGraph do
     url
     |> HTTPoison.get
     |> handle_response
-    |> Map.fetch!("data")
   end
 end
