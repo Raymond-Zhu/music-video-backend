@@ -1,9 +1,5 @@
 defmodule Karaoke.MusicGraph do
-  defp handle_response({:ok, %{status_code: 200, body: body}}) do
-    body
-    |> Poison.decode!
-    |> Map.fetch!("data")
-  end
+  defp handle_response({:ok, %{status_code: 200, body: body}}), do: body |> Poison.decode! |> Map.fetch!("data")
   defp handle_response({:error, %{reason: reason}}), do: {:error, %{reason: reason}}
   defp handle_response({:ok, %{status_code: code, body: body}}), do: {:error, %{status_code: code, body: body}}
 
@@ -15,5 +11,6 @@ defmodule Karaoke.MusicGraph do
     url
     |> HTTPoison.get
     |> handle_response
+    |> Map.fetch!("data")
   end
 end

@@ -17,7 +17,7 @@ defmodule Karaoke.Track do
   end
 
   @required_fields ~w(title artist_name track_artist_id track_youtube_id track_id)
-  @optional_fields ~w(album_art popularity track_spotify_id album_title)
+  @optional_fields ~w(image popularity track_spotify_id album_title)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -58,5 +58,8 @@ defmodule Karaoke.Track do
                       "    Track: #{track["title"]}\n" <>
                       "    Error: #{Karaoke.ChangesetView.translate_errors(changeset) |> Poison.encode!}"
     end
+  end
+
+  def get_image do
   end
 end
