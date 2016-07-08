@@ -7,7 +7,7 @@ defmodule Karaoke.Track do
   schema "tracks" do
     field :track_id, :string, default: ""
     field :title, :string, default: ""
-    field :track_artist_id :string, default: ""
+    field :track_artist_id, :string, default: ""
     field :artist_name, :string, default: ""
     field :popularity, :float, default: 0.0
     field :track_youtube_id, :string, default: ""

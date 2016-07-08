@@ -5,7 +5,7 @@ defmodule Karaoke.TrackController do
   def show(conn, %{"artist_id" => artist_id}) do
     tracks = Repo.all(
               from track in Karaoke.Track,
-              where: ^artist_id == track.artist_id,
+              where: ^artist_id == track.track_artist_id,
               select: track
              )
 
