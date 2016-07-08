@@ -13,7 +13,7 @@ defmodule Karaoke.Track do
     field :artist_name, :string, default: ""
     field :popularity, :float, default: 0.0
     field :album_title, :string, default: ""
-    field :album_art, :string, default: ""
+    field :image, :string, default: ""
   end
 
   @required_fields ~w(title artist_name track_artist_id track_youtube_id track_id)
