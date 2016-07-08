@@ -64,12 +64,8 @@ defmodule Karaoke.Track do
   end
 
   def get_images(list_of_tracks, album_art_map) do
-    Logger.info "#{inspect list_of_tracks}"
     for track <- list_of_tracks do
-      Logger.info "Track: #{inspect track}"
       spotify_id = track["track_spotify_id"]
-      Logger.info "Spotify ID: #{inspect spotify_id}"
-      Logger.info "Album: #{inspect album_art_map}"
       if album_art_map[spotify_id] != nil do
         Map.put(track, "image", album_art_map[spotify_id])
       else
