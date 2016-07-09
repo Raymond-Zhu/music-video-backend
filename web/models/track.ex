@@ -34,23 +34,24 @@ defmodule Karaoke.Track do
     name
     |> Karaoke.MusicGraph.get_tracks
     |> case do
-         {:error, %{reason: reason}} -> Logger.error "HTTPoison encountered an error. Reason: #{reason}"
+         {:error, %{reason: reason}} -> {:error, "HTTPoison encountered an error. Reason: #{reason}"}
          {:error, %{status_code: code, body: body}} ->
-           Logger.error "Could not get tracks for artist.\n" <>
+           {:error, "Could not get tracks for artist.\n" <>
                          "    Status Code: #{code}\n" <>
-                         "    Body: #{body}"
+                         "    Body: #{body}"}
 
-         [] -> Logger.error "No tracks were returned for artist: #{name}"
+         [] -> {:error, "No tracks were returned for artist: #{name}"}
          list_of_tracks ->
+           list_of_tracks = Enum.filter(fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end)
            album_art = Karaoke.Spotify.get_album_art(list_of_tracks)
+
            list_of_tracks
            |> insert_images(album_art)
-           |> Enum.filter_map(fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end, &insert_track/1)
+           |> Enum.map(fn(track) -> changeset(Karaoke.Track, track)
        end
   end
 
   def insert_track(track) do
-    Logger.info "Inserting"
     changeset = __MODULE__.changeset(%__MODULE__{}, track)
     case Karaoke.Repo.insert(changeset) do
       {:ok, struct} -> struct

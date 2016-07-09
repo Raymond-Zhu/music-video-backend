@@ -12,5 +12,6 @@ defmodule Karaoke.Router do
     post "/artist/add", ArtistController, :create
 
     get "/track", TrackController, :show
+    get "/track/update" , TrackController, :update
   end
 end
