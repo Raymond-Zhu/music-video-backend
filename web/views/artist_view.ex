@@ -5,7 +5,7 @@ defmodule Karaoke.ArtistView do
     %{artists: artists}
   end
 
-  def render("success.json", %{success: ok}) do
-    %{success: ok}
+  def render("success.json", %{tracks: tracks}) do
+    %{tracks: tracks}
   end
 end

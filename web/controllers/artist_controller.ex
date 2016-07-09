@@ -14,11 +14,11 @@ defmodule Karaoke.ArtistController do
 
     case Repo.insert(changeset) do
       {:ok, artist} ->
-        artist |> Karaoke.Track.insert_tracks_for
+        tracks = Karaoke.Track.insert_tracks_for(artist)
 
         conn
         |> put_status(:created)
-        |> render("success.json", success: "ok")
+        |> render("success.json", tracks: tracks)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
