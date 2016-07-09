@@ -42,9 +42,9 @@ defmodule Karaoke.Track do
 
          [] -> Logger.error "No tracks were returned for artist: #{name}"
          list_of_tracks ->
-           album_art_map = Karaoke.Spotify.get_album_art(list_of_tracks)
+           album_art = Karaoke.Spotify.get_album_art(list_of_tracks)
            list_of_tracks
-           |> get_images(album_art_map)
+           |> insert_images(album_art)
            |> Enum.filter_map(fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end, &insert_track/1)
        end
   end
@@ -62,7 +62,7 @@ defmodule Karaoke.Track do
     end
   end
 
-  def get_images(list_of_tracks, album_art_map) do
+  def insert_images(list_of_tracks, album_art_map) do
     for track <- list_of_tracks do
       spotify_id = track["track_spotify_id"]
       if album_art_map[spotify_id] != nil do
