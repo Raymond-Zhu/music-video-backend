@@ -16,31 +16,32 @@ defmodule Karaoke.ArtistController do
     tracks = []
 
     with {:ok, artist} <- Repo.insert(changeset),
-         {:ok, list_of_tracks} <- Track.get_tracks_for(artist),
-         {:ok, tracks} <- Repo.insert_all(Track, list_of_tracks)
-    do conn
+         {:ok, list_of_tracks} <- Track.get_tracks_for(artist), do
+
+       for track <- list_of_tracks do
+         %Track{}
+         |> Track.changeset(track)
+         |> Repo.insert!
+       end
+
+       conn
        |> put_status(:created)
        |> render("success.json", tracks: tracks)
     else
-      {:error, error_info} ->  Logger.info"hi"
+      {:error, error_info} ->  handle_error(error_info)
     end
+  end
 
+  defp handle_error(reason) when is_binary(reason) do
+    Logger.error "#{reason}"
 
-    #case Repo.insert(changeset) do
-      #{:ok, artist} ->
-        #case Track.get_tracks_for(artist) do
-          #{:error, reason} -> Logger.error(reason)
-          #list_of_tracks ->
-            #list_of_entries =
-            #case Repo.insert_all(%Track{}, list_of_entries) do
-              #{:ok, returned_tracks} -> tracks = returned_tracks
-              #{:error, _changeset} -> Logger.error "Problem inserting tracks to database for artist #{inspect artist}"
-            #end
-        #end
-      #{:error, changeset} ->
-        #conn
-        #|> put_status(:unprocessable_entity)
-        #|> render(Karaoke.ChangesetView, "error.json", changeset: changeset)
-    #end
+    conn
+    |> put_status(:ok)
+    |> render("success.json", tracks: [])
+  end
+  defp handle_error(changeset) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> render(Karaoke.ChangesetView, "error.json", changeset: changeset)
   end
 end
