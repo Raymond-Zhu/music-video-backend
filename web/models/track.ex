@@ -30,37 +30,22 @@ defmodule Karaoke.Track do
     |> unique_constraint(:title)
   end
 
-  def insert_tracks_for(%Karaoke.Artist{id: artist_id, name: name})  do
+  def get_tracks_for(%Karaoke.Artist{id: artist_id, name: name})  do
     name
     |> Karaoke.MusicGraph.get_tracks
     |> case do
          {:error, %{reason: reason}} -> {:error, "HTTPoison encountered an error. Reason: #{reason}"}
          {:error, %{status_code: code, body: body}} ->
            {:error, "Could not get tracks for artist.\n" <>
-                         "    Status Code: #{code}\n" <>
-                         "    Body: #{body}"}
+                    "    Status Code: #{code}\n" <>
+                    "    Body: #{body}"}
 
-         [] -> {:error, "No tracks were returned for artist: #{name}"}
+         [] -> []
          list_of_tracks ->
-           list_of_tracks = Enum.filter(fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end)
-           album_art = Karaoke.Spotify.get_album_art(list_of_tracks)
-
-           list_of_tracks
-           |> insert_images(album_art)
-           |> Enum.map(fn(track) -> changeset(Karaoke.Track, track)
+            with valid_tracks <- Enum.filter(list_of_tracks, fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end),
+                 album_art <- Karaoke.Spotify.get_album_art(valid_tracks),
+            do: {:ok, insert_images(valid_tracks, album_art)}
        end
-  end
-
-  def insert_track(track) do
-    changeset = __MODULE__.changeset(%__MODULE__{}, track)
-    case Karaoke.Repo.insert(changeset) do
-      {:ok, struct} -> struct
-      {:error, changeset} ->
-        Logger.error "An error occured while inserting track.\n" <>
-                      "    Artist: #{track["artist_name"]}\n" <>
-                      "    Track: #{track["title"]}\n" <>
-                      "    Error: #{Karaoke.ChangesetView.translate_errors(changeset) |> Poison.encode!}"
-    end
   end
 
   def insert_images(list_of_tracks, album_art_map) do

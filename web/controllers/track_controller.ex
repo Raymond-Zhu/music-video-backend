@@ -19,7 +19,7 @@ defmodule Karaoke.TrackController do
     tracks = Karaoke.Track.insert_tracks_for(%Karaoke.Artist{id: artist_id, name: name})
 
     conn
-    |> pust_status(:ok)
+    |> put_status(:ok)
     |> render("track.json", tracks: tracks)
   end
 end
