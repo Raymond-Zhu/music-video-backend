@@ -16,17 +16,17 @@ defmodule Karaoke.ArtistController do
     tracks = []
 
     with {:ok, artist} <- Repo.insert(changeset),
-         {:ok, list_of_tracks} <- Track.get_tracks_for(artist), do
+         {:ok, list_of_tracks} <- Track.get_tracks_for(artist),
+    do tracks =
+         for track <- list_of_tracks do
+            %Track{}
+            |> Track.changeset(track)
+            |> Repo.insert!
+          end
 
-       for track <- list_of_tracks do
-         %Track{}
-         |> Track.changeset(track)
-         |> Repo.insert!
-       end
-
-       conn
-       |> put_status(:created)
-       |> render("success.json", tracks: tracks)
+        conn
+        |> put_status(:created)
+        |> render("success.json", tracks: tracks)
     else
       {:error, error_info} ->  handle_error(error_info)
     end

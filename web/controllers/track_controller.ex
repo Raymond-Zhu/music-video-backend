@@ -16,10 +16,17 @@ defmodule Karaoke.TrackController do
 
   def update(conn, %{"artist_id" => artist_id, "name" => name}) do
     Repo.delete_all(from track in Karaoke.Track, where: track.track_artist_id == ^artist_id)
-    tracks = Karaoke.Track.insert_tracks_for(%Karaoke.Artist{id: artist_id, name: name})
+    list_of_tracks = Karaoke.Track.get_tracks_for(%Karaoke.Artist{id: artist_id, name: name})
+
+    list_of_tracks =
+      for track <- list_of_tracks do
+        %Track{}
+        |> Track.changeset(track)
+        |> Repo.insert!
+      end
 
     conn
     |> put_status(:ok)
-    |> render("track.json", tracks: tracks)
+    |> render("track.json", tracks: list_of_tracks)
   end
 end
