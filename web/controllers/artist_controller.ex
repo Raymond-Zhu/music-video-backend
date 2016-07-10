@@ -17,8 +17,7 @@ defmodule Karaoke.ArtistController do
 
     with {:ok, artist} <- Repo.insert(changeset),
          {:ok, list_of_tracks} <- Track.get_tracks_for(artist),
-         list_of_entries <- Enum.map(list_of_tracks, fn(track) -> Track.changeset(%Track{}, track) end),
-         {:ok, tracks} <- Repo.insert_all(%Track{}, list_of_entries)
+         {:ok, tracks} <- Repo.insert_all(Track, list_of_tracks)
     do conn
        |> put_status(:created)
        |> render("success.json", tracks: tracks)
