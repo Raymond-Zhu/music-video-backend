@@ -16,7 +16,7 @@ defmodule Karaoke.ArtistController do
     tracks = []
 
     with {:ok, artist} <- Repo.insert(changeset),
-         {:ok, list_of_tracks} <- Track.get_tracks_for(artist),
+         {:ok, list_of_tracks} <- Track.get_tracks_for(artist)
     do tracks =
          for track <- list_of_tracks do
             %Track{}
@@ -28,18 +28,18 @@ defmodule Karaoke.ArtistController do
         |> put_status(:created)
         |> render("success.json", tracks: tracks)
     else
-      {:error, error_info} ->  handle_error(error_info)
+      {:error, error_info} ->  handle_error(conn, error_info)
     end
   end
 
-  defp handle_error(reason) when is_binary(reason) do
+  defp handle_error(conn, reason) when is_binary(reason) do
     Logger.error "#{reason}"
 
     conn
     |> put_status(:ok)
     |> render("success.json", tracks: [])
   end
-  defp handle_error(changeset) do
+  defp handle_error(conn, changeset) do
     conn
     |> put_status(:unprocessable_entity)
     |> render(Karaoke.ChangesetView, "error.json", changeset: changeset)

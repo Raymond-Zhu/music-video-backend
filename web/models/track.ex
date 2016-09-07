@@ -40,7 +40,7 @@ defmodule Karaoke.Track do
                     "    Status Code: #{code}\n" <>
                     "    Body: #{body}"}
 
-         [] -> {:error, "No tracks found for artist: #{artist}"}
+         [] -> {:error, "No tracks found for artist: #{name}"}
          list_of_tracks ->
             with valid_tracks <- Enum.filter(list_of_tracks, fn(track) -> Map.get(track, "track_youtube_id") != nil && Map.get(track, "track_artist_id") == artist_id end),
                  album_art <- Karaoke.Spotify.get_album_art(valid_tracks),

@@ -1,6 +1,7 @@
 defmodule Karaoke.Artist do
   use Karaoke.Web, :model
 
+  @derive {Poison.Encoder, except: [:__meta__]}
   @primary_key {:id, :string, []}
   schema "artists" do
     field :name, :string, default: ""
