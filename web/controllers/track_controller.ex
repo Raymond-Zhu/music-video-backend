@@ -1,7 +1,7 @@
 defmodule Karaoke.TrackController do
   use Karaoke.Web, :controller
   import Ecto.Query
-
+  alias Karaoke.Track
   def show(conn, %{"artist_id" => artist_id}) do
     tracks = Repo.all(
               from track in Karaoke.Track,
